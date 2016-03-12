@@ -100,7 +100,6 @@
         */
         PP.moveSectionUp = function () {
             var prev = $('.pp-section.active').prev('.pp-section');
-
             //looping to the bottom if there's no more sections above
             if (!prev.length && options.loopTop) {
                 prev = $('.pp-section').last();
@@ -143,6 +142,22 @@
             if(destiny.length > 0){
                 scrollPage(destiny);
             }
+        };
+
+        /**
+         * Destroys PagePilling instance.
+         *
+         * In real it isn't a destroy operation, more restoring PagePilling scroll to its initial state
+         * when it can be initialize again.
+         */
+        PP.destroy = function() {
+            container.attr({
+                'style': ''
+            });
+
+            container.find(options.sectionSelector).removeClass('pp-section active pp-table pp-easing');
+            PP.setMouseWheelScrolling(false);
+            PP.setAllowScrolling(false);
         };
 
         //adding internal class names to void problem with common ones
@@ -211,7 +226,11 @@
         * Enables vertical centering by wrapping the content and the use of table and table-cell
         */
         function addTableClass(element){
-            element.addClass('pp-table').wrapInner('<div class="pp-tableCell" style="height:100%" />');
+            element.addClass('pp-table')
+
+            if (!element.find('.pp-tableCell').length) {
+                element.wrapInner('<div class="pp-tableCell" style="height:100%" />');
+            }
         }
 
 
